@@ -1,0 +1,4 @@
+/backups
+/config/.generated
+/config/user/*
+!/config/user/.gitkeep

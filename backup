@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CONF_ROOT="./config"
+CONF_GENERATED_DIR="$CONF_ROOT/.generated"
+CONF_GENERATED_RSNAPSHOT="$CONF_GENERATED_DIR/rsnapshot.conf"
+
+mkdir -p "$CONF_GENERATED_DIR"
+
+cat "$CONF_ROOT/rsnapshot.conf" > $CONF_GENERATED_RSNAPSHOT
+echo "snapshot_root	$PWD/backups" >> $CONF_GENERATED_RSNAPSHOT
+
+for config in ./config/user/*; do
+  ./lib/generate-config.sh "$CONF_GENERATED_RSNAPSHOT" "$(basename $config)" $config
+done
+
+rsnapshot -c $CONF_GENERATED_RSNAPSHOT ${1-hourly}
